@@ -8,6 +8,15 @@ export default class GitHubSDK {
         this.secretToken = secretToken;
     }
 
+    async createPortfolio() {
+        const projects = await this.getProjectsForPortfolio();
+        const parentContainer = document.querySelector(".portfolio__main");
+        projects.forEach((project) => {
+            const markup = this.createMarkup(project);
+            parentContainer.insertAdjacentHTML("afterbegin", markup);
+        });
+    }
+
     async getProjectsForPortfolio() {
         const projects = await this.selectProjectsData();
         const forPortfolio = projects.filter(
@@ -20,19 +29,24 @@ export default class GitHubSDK {
     async selectProjectsData() {
         const projects = [];
         const data = await this.getProjectsData();
-        data.forEach((item) => {
-            const project = {
-                id: item.id,
-                name: item.name,
-                url: item.html_url,
-                description: item.description,
-                topics: item.topics,
-                images: item.homepage,
-            };
-            projects.push(project);
-        });
-        //console.log(projects);
-        return projects;
+        if (data) {
+            data.forEach((item) => {
+                const name = item.name.split("-").join(" ");
+                const topics = item.topics.join().replace(/,/g, " ");
+                console.log(topics);
+                const project = {
+                    id: item.id,
+                    name: name,
+                    url: item.html_url,
+                    description: item.description,
+                    topics: topics,
+                    images: item.homepage,
+                };
+                projects.push(project);
+            });
+            //console.log(projects);
+            return projects;
+        }
     }
 
     async getProjectsData() {
@@ -60,5 +74,31 @@ export default class GitHubSDK {
             .catch((err) => {
                 console.log("data cannot be fetched");
             });
+    }
+
+    createMarkup(project) {
+        return `
+        <article class="main__project project">
+            <h2 class="project__title">${project.name}</h2>
+            <div class="project__content">
+                <img src="" alt="" class="project__img" />
+            </div>
+            <p class="project__description">
+            ${project.description}
+            </p>
+            <p class="project__technologies">${project.topics}</p>
+            <div class="project__buttons">
+                <button class="btn project__repo">
+                    <a href="${project.url}" class="link project__repo-link"
+                    >See code</a>
+                </button>
+                <button class="btn project__live">
+                    <a href="${project.images}" class="link project__live-link"
+                    >See it live</a
+                    >
+                </button>
+            </div>
+        </article>
+        `;
     }
 }

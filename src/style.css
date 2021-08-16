@@ -9,4 +9,80 @@
 html {
     font-size: 18px;
     font-family: "Space Mono", monospace;
+    color: white;
+}
+
+body {
+    background: radial-gradient(
+        circle,
+        rgba(238, 174, 202, 1) 50%,
+        rgba(148, 187, 233, 1) 100%
+    );
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.portfolio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.portfolio__heading {
+    font-size: 50px;
+    margin: 50px;
+}
+
+.portfolio__main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 50px;
+}
+
+.project {
+    width: 600px;
+    //border: 1px solid white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.363);
+}
+
+.project__description {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.project__technologies {
+    border: solid 1px white;
+    padding: 5px;
+    margin: 10px 5px;
+    text-align: center;
+}
+
+.project__buttons {
+    margin: 15px;
+}
+
+.btn {
+    padding: 5px;
+    background-color: rgba(123, 82, 235, 0.7);
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
 }
