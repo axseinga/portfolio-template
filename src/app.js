@@ -1,4 +1,5 @@
 import GitHubSDK from "./../src/GitHubSDK";
+import "./style.css";
 const config = require("./../config.js");
 
 document.addEventListener("DOMContentLoaded", init);

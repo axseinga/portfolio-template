@@ -13,7 +13,7 @@ export default class GitHubSDK {
         const forPortfolio = projects.filter(
             (item) => !item.name.includes("practice")
         );
-        //console.log(forPortfolio);
+        console.log(forPortfolio);
         return forPortfolio;
     }
 
