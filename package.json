@@ -4,7 +4,9 @@
     "description": "> ⭐ ***README** to coś więcej niż opis. Poprzez nie **pokazujesz swoje mocne strony** – swoją dokładność, sposób myślenia i podejście do rozwiązywania problemów. Niech Twoje README pokaże, że masz **świetne predyspozycje do rozwoju!*** >  > 🎁 *Zacznij od razu. Skorzystaj z **[szablonu README i wskazówek](https://github.com/devmentor-pl/readme-template)**.*",
     "main": "index.js",
     "scripts": {
-        "test": "jest --watchAll"
+        "test": "jest --watchAll",
+        "start": "webpack serve --mode development --open",
+        "build": "webpack --mode production"
     },
     "repository": {
         "type": "git",
@@ -21,6 +23,15 @@
         "@babel/core": "^7.15.0",
         "@babel/preset-env": "^7.15.0",
         "babel-jest": "^27.0.6",
-        "jest": "^27.0.6"
+        "babel-loader": "^8.2.2",
+        "html-webpack-plugin": "^5.3.2",
+        "jest": "^27.0.6",
+        "source-map-loader": "^3.0.0",
+        "webpack": "^5.50.0",
+        "webpack-cli": "^4.8.0",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "dependencies": {
+        "node-fetch": "^2.6.1"
     }
 }
