@@ -1,4 +1,5 @@
-const GitHubSDK = require("./../src/GitHubSDK");
+const { expect } = require("@jest/globals");
+import GitHubSDK from "./../src/GitHubSDK";
 
 describe("GitHubDSK", () => {
     it("check if class GitHubDSK exist", () => {
