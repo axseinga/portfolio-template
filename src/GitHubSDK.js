@@ -22,7 +22,6 @@ export default class GitHubSDK {
         const forPortfolio = projects.filter(
             (item) => !item.name.includes("practice")
         );
-        console.log(forPortfolio);
         return forPortfolio;
     }
 
@@ -33,7 +32,6 @@ export default class GitHubSDK {
             data.forEach((item) => {
                 const name = item.name.split("-").join(" ");
                 const topics = item.topics.join().replace(/,/g, " ");
-                console.log(topics);
                 const project = {
                     id: item.id,
                     name: name,
@@ -44,7 +42,6 @@ export default class GitHubSDK {
                 };
                 projects.push(project);
             });
-            //console.log(projects);
             return projects;
         }
     }
