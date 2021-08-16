@@ -5,5 +5,5 @@ document.addEventListener("DOMContentLoaded", init);
 
 function init() {
     const gh = new GitHubSDK(config.username, config.secretToken);
-    gh.getProjects();
+    gh.getProjectsForPortfolio();
 }
