@@ -1,53 +1,13 @@
 import { data } from "browserslist";
 
-global.fetch = require("node-fetch");
-
 export default class GitHubSDK {
     constructor(username, secretToken) {
         this.username = username;
         this.secretToken = secretToken;
     }
 
-    async createPortfolio() {
-        const projects = await this.getProjectsForPortfolio();
-        const parentContainer = document.querySelector(".portfolio__main");
-        projects.forEach((project) => {
-            const markup = this.createMarkup(project);
-            parentContainer.insertAdjacentHTML("afterbegin", markup);
-        });
-    }
-
-    async getProjectsForPortfolio() {
-        const projects = await this.selectProjectsData();
-        const forPortfolio = projects.filter(
-            (item) => !item.name.includes("practice")
-        );
-        return forPortfolio;
-    }
-
-    async selectProjectsData() {
-        const projects = [];
-        const data = await this.getProjectsData();
-        if (data) {
-            data.forEach((item) => {
-                const name = item.name.split("-").join(" ");
-                const topics = item.topics.join().replace(/,/g, " ");
-                const project = {
-                    id: item.id,
-                    name: name,
-                    url: item.html_url,
-                    description: item.description,
-                    topics: topics,
-                    images: item.homepage,
-                };
-                projects.push(project);
-            });
-            return projects;
-        }
-    }
-
-    async getProjectsData() {
-        const url = `https://api.github.com/users/${this.username}/repos?per_page=50`;
+    async checkHowManyCommits(projectName) {
+        const url = `https://api.github.com/repos/${this.username}/${projectName}/commits`;
         const promise = fetch(url, {
             method: "GET",
             headers: {
@@ -64,7 +24,59 @@ export default class GitHubSDK {
                 return Promise.reject(resp);
             })
             .then((data) => {
-                //console.log(data);
+                const commitsCount = data.length - 1;
+                return commitsCount;
+            })
+            .catch((err) => {
+                console.log("data cannot be fetched");
+            });
+    }
+
+    async checkWhenUpdated(projectName) {
+        const url = `https://api.github.com/repos/${this.username}/${projectName}/commits`;
+        const promise = fetch(url, {
+            method: "GET",
+            headers: {
+                Accept: "application/vnd.github.mercy-preview+json",
+                Authorization: `token ${this.secretToken}`,
+            },
+            body: JSON.stringify(),
+        });
+        return promise
+            .then((resp) => {
+                if (resp.ok) {
+                    return resp.json();
+                }
+                return Promise.reject(resp);
+            })
+            .then((data) => {
+                const dataAPI = data[0].commit.committer.date;
+                const date = dataAPI.slice(0, -10);
+                return date;
+            })
+            .catch((err) => {
+                console.log("data cannot be fetched");
+            });
+    }
+
+    async getProjectByName(projectName) {
+        const url = `https://api.github.com/repos/${this.username}/${projectName}`;
+        const promise = fetch(url, {
+            method: "GET",
+            headers: {
+                Accept: "application/vnd.github.mercy-preview+json",
+                Authorization: `token ${this.secretToken}`,
+            },
+            body: JSON.stringify(),
+        });
+        return promise
+            .then((resp) => {
+                if (resp.ok) {
+                    return resp.json();
+                }
+                return Promise.reject(resp);
+            })
+            .then((data) => {
                 const dataAPI = data;
                 return dataAPI;
             })
@@ -73,29 +85,27 @@ export default class GitHubSDK {
             });
     }
 
-    createMarkup(project) {
-        return `
-        <article class="main__project project">
-            <h2 class="project__title">${project.name}</h2>
-            <div class="project__content">
-                <img src="" alt="" class="project__img" />
-            </div>
-            <p class="project__description">
-            ${project.description}
-            </p>
-            <p class="project__technologies">${project.topics}</p>
-            <div class="project__buttons">
-                <button class="btn project__repo">
-                    <a href="${project.url}" class="link project__repo-link"
-                    >See code</a>
-                </button>
-                <button class="btn project__live">
-                    <a href="${project.images}" class="link project__live-link"
-                    >See it live</a
-                    >
-                </button>
-            </div>
-        </article>
-        `;
+    async getAllProjects() {
+        const url = `https://api.github.com/users/${this.username}/repos?per_page=50`;
+        const promise = fetch(url, {
+            method: "GET",
+            headers: {
+                Accept: "application/vnd.github.mercy-preview+json",
+                Authorization: `token ${this.secretToken}`,
+            },
+            body: JSON.stringify(),
+        });
+        return promise
+            .then((resp) => {
+                if (resp.ok) {
+                    const statusCode = resp.status;
+                    const data = resp.json();
+                    return Promise.all([statusCode, data]);
+                }
+                return Promise.reject(resp);
+            })
+            .catch((err) => {
+                console.log("data cannot be fetched");
+            });
     }
 }
